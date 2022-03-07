@@ -17,11 +17,14 @@
 <script>
 import AuthForm from "~/components/AuthForm.vue";
 export default {
+  layout: "login",
   components: { AuthForm },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    handleSubmit() {},
+  },
 };
 </script>
 

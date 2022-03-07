@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "Next auth - Bank App",
+    title: "Nuxt auth - Bank App",
     htmlAttrs: {
       lang: "en",
     },
