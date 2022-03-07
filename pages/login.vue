@@ -23,7 +23,14 @@ export default {
     return {};
   },
   methods: {
-    handleSubmit() {},
+    async handleSubmit(loginInfo) {
+      try {
+        let response = await this.$auth.loginWith("local", { data: loginInfo });
+        console.log(response);
+      } catch (err) {
+        console.log(err.response);
+      }
+    },
   },
 };
 </script>

@@ -29,12 +29,39 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ["@nuxtjs/axios", "@nuxtjs/auth-next"],
 
+  axios: {
+    baseURL: "https://staging-api.reconwithme.com",
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     postcss: {
       plugins: {
         tailwindcss: {},
         autoprefixer: {},
+      },
+    },
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: "token",
+          global: true,
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: "user",
+          // autoFetch: true
+        },
+        endpoints: {
+          login: {
+            url: "/accounts/users/login",
+            method: "post",
+          },
+        },
       },
     },
   },

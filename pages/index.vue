@@ -72,5 +72,6 @@
 <script>
 export default {
   name: "IndexPage",
+  layout: "login",
 };
 </script>
