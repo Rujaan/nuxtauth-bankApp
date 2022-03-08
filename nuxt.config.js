@@ -27,7 +27,10 @@ export default {
   buildModules: ["@nuxt/postcss8"],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/auth-next"],
+  modules: [
+    { src: "@nuxtjs/axios", mode: "client" },
+    { src: "@nuxtjs/auth-next", mode: "client" },
+  ],
 
   axios: {
     baseURL: "https://staging-api.reconwithme.com",
@@ -44,6 +47,12 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: "/dashboard",
+      // logout: "/dashboard",
+      // callback: "/dashboard",
+      home: "/dashboard",
+    },
     strategies: {
       local: {
         token: {
@@ -53,8 +62,9 @@ export default {
           // type: 'Bearer'
         },
         user: {
-          property: "user",
-          // autoFetch: true
+          property: false,
+          autoFetch: false,
+          endpoints: false,
         },
         endpoints: {
           login: {

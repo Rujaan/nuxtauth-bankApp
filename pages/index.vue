@@ -4,7 +4,10 @@
   >
     <div>
       <h1 class="text-4xl">
-        Welcome to <strong class="text-cyan-700">THE</strong> banking solution
+        {{ $auth.user }}
+        {{ $auth.loggedIn }}
+        Welcome to
+        <strong class="text-cyan-700">THE</strong> banking solution
       </h1>
       <NuxtLink to="/login">
         <div

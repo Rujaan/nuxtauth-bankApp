@@ -24,9 +24,17 @@ export default {
   },
   methods: {
     async handleSubmit(loginInfo) {
+      console.log(loginInfo);
       try {
         let response = await this.$auth.loginWith("local", { data: loginInfo });
-        console.log(response);
+        this.$auth.$storage.setUniversal(
+          "user",
+          response.data.iam.username,
+          true
+        );
+        this.$auth.$storage.setUniversal("loggedIn", "true", true);
+        // Only runs once, resets on refresh so
+        // this.$auth.setUser(response.data.iam.username);
       } catch (err) {
         console.log(err.response);
       }
