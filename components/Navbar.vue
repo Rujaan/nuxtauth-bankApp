@@ -4,29 +4,23 @@
       <div class="cursor-pointer">Logo</div>
       <div class="flex gap-x-4 cursor-pointer">
         <div v-if="$auth.loggedIn">
-          {{ $auth.user }}
-          <button>Logout</button>
+          {{ user }}
+          <Logout />
         </div>
-        {{ loggedIn }}
-        {{ user }}
-        <!-- <button class="cursor-pointer">Logout</button> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Logout from "./Logout.vue";
 export default {
   computed: {
-    // a computed getter
-    loggedIn: function () {
-      // `this` points to the vm instance
-      return this.$auth.loggedIn;
-    },
     user: function () {
-      return this.$auth.user;
+      return this.$auth.$storage.getUniversal("user");
     },
   },
+  components: { Logout },
 };
 </script>
 

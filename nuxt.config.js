@@ -49,7 +49,7 @@ export default {
   auth: {
     redirect: {
       login: "/dashboard",
-      // logout: "/dashboard",
+      logout: "/login",
       // callback: "/dashboard",
       home: "/dashboard",
     },
@@ -71,6 +71,8 @@ export default {
             url: "/accounts/users/login",
             method: "post",
           },
+          logout: false,
+          user: false,
         },
       },
     },

@@ -32,13 +32,18 @@ export default {
           response.data.iam.username,
           true
         );
-        this.$auth.$storage.setUniversal("loggedIn", "true", true);
+        // this.$auth.$storage.setUniversal("loggedIn", "true", true);
         // Only runs once, resets on refresh so
-        // this.$auth.setUser(response.data.iam.username);
+        this.$auth.setUser(response.data.iam.username);
       } catch (err) {
         console.log(err.response);
       }
     },
+  },
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/dashboard");
+    }
   },
 };
 </script>
