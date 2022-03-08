@@ -4,11 +4,9 @@
       <div class="text-3xl">Log in</div>
 
       <AuthForm buttonText="Login User" :submitForm="handleSubmit" />
-      <p class="p-2 text-sm">
+      <p class="p-2 text-sm mt-5">
         Don't have an account ?
-        <NuxtLink to="/register">
-          <span class="text-cyan-800 cursor-pointer">Register</span>
-        </NuxtLink>
+        <span class="text-cyan-800 cursor-pointer">Sad : (</span>
       </p>
     </div>
   </div>
