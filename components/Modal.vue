@@ -11,7 +11,7 @@
 <script>
 import BankForm from "./BankForm.vue";
 export default {
-  props: ["heading", "submitForm", "buttonText", "type"],
+  props: ["heading", "submitForm", "buttonText"],
   methods: {
     closeModal() {
       this.$emit("close");
