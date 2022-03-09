@@ -46,6 +46,10 @@ export default {
     },
   },
 
+  generate: {
+    dir: "public",
+  },
+
   auth: {
     redirect: {
       login: "/dashboard",
