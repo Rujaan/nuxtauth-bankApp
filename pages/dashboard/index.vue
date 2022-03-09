@@ -6,8 +6,6 @@
         heading="Add Credit"
         buttonText="Submit Credit"
         :submitForm="handleSubmitOfCredit"
-        @submitted="forceUp"
-        @click="forceUp"
       />
     </div>
     <div v-if="showDebitModal">
@@ -16,7 +14,6 @@
         heading="Add Debit"
         buttonText="Submit Debit"
         :submitForm="handleSubmitOfDebit"
-        @submitted="updateTable"
       />
     </div>
 
@@ -41,8 +38,12 @@
         <span class="relative group-focus:text-white">Add Debit</span>
       </button>
     </div>
-    <div :key="componentKey">
-      <DashboardTable :values="value" :total="total" @clear="clearValue" />
+    <div>
+      <DashboardTable
+        :values="nuxtBank.value"
+        :total="nuxtBank.total"
+        @clear="clearValue"
+      />
     </div>
   </div>
 </template>
@@ -54,46 +55,17 @@ export default {
   layout: "dashboard",
   data() {
     return {
-      nuxtBank: null,
-      value: null,
-      total: null,
+      nuxtBank: {
+        value: [],
+        total: 0,
+      },
       showCreditModal: false,
       showDebitModal: false,
-      componentKey: 0,
     };
   },
   mounted() {
-    console.log("mounted");
     if (JSON.parse(localStorage.getItem("nuxtBank"))) {
       this.nuxtBank = JSON.parse(localStorage.getItem("nuxtBank"));
-    } else {
-      this.nuxtBank = {};
-      this.total = 0;
-    }
-    if (JSON.parse(localStorage.getItem("nuxtBank"))) {
-      this.nuxtBank.amount = JSON.parse(
-        localStorage.getItem("nuxtBank")
-      ).amount;
-    }
-
-    if (!this.nuxtBank.value) {
-      this.nuxtBank.value = [];
-    } else {
-      this.value = JSON.parse(localStorage.getItem("nuxtBank")).value;
-    }
-
-    if (!this.nuxtBank.value.id) {
-      this.nuxtBank.value.id = 0;
-    } else {
-      this.nuxtBank.value.id = JSON.parse(
-        localStorage.getItem("nuxtBank")
-      ).value.id;
-    }
-
-    if (!this.nuxtBank.total) {
-      this.nuxtBank.total = 0;
-    } else {
-      this.total = JSON.parse(localStorage.getItem("nuxtBank")).total;
     }
   },
   middleware({ $auth, redirect }) {
@@ -108,75 +80,48 @@ export default {
     toggleDebitModal() {
       this.showDebitModal = !this.showDebitModal;
     },
-
-    updateTable() {
-      this.componentKey += 1;
-      console.log(this.componentKey);
-    },
-
-    forceUp() {
-      // ...
-      this.$forceUpdate(); // Notice we have to use a $ here
-      console.log("forced");
-      // ...
-    },
-
     handleSubmitOfCredit(creditInfo) {
-      try {
-        var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
-      } catch (error) {
-        var value = null;
-      }
-      if (process.browser && value) {
-        var bigId = Math.max.apply(
-          Math,
-          value.map(function (o) {
-            return o.id;
-          })
-        );
-      } else {
-        bigId = 0;
-      }
-      this.nuxtBank.value.push({
-        amount: creditInfo.amount,
-        date: creditInfo.date,
-        remarks: creditInfo.remarks,
-        type: "credit",
-        id: bigId + 1,
-      });
-      this.nuxtBank.total += parseInt(creditInfo.amount);
+      let nextId = this.nuxtBank.value.length;
+      this.nuxtBank = {
+        value: [
+          ...this.nuxtBank.value,
+          {
+            amount: creditInfo.amount,
+            date: creditInfo.date,
+            remarks: creditInfo.remarks,
+            type: "credit",
+            id: nextId,
+          },
+        ],
+        total: parseInt(creditInfo.amount) + this.nuxtBank.total,
+      };
       localStorage.setItem("nuxtBank", JSON.stringify(this.nuxtBank));
+      this.toggleCreditModal();
     },
-
     handleSubmitOfDebit(debitInfo) {
-      try {
-        var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
-      } catch (error) {
-        var value = null;
-      }
-      if (process.browser && value) {
-        var bigId = Math.max.apply(
-          Math,
-          value.map(function (o) {
-            return o.id;
-          })
-        );
-      } else {
-        bigId = 0;
-      }
-      this.nuxtBank.value.push({
-        amount: debitInfo.amount,
-        date: debitInfo.date,
-        remarks: debitInfo.remarks,
-        type: "debit",
-        id: bigId + 1,
-      });
-      this.nuxtBank.total -= parseInt(debitInfo.amount);
+      let nextId = this.nuxtBank.value.length;
+      this.nuxtBank = {
+        value: [
+          ...this.nuxtBank.value,
+          {
+            amount: debitInfo.amount,
+            date: debitInfo.date,
+            remarks: debitInfo.remarks,
+            type: "debit",
+            id: nextId,
+          },
+        ],
+        total: this.nuxtBank.total - parseInt(debitInfo.amount),
+      };
       localStorage.setItem("nuxtBank", JSON.stringify(this.nuxtBank));
+      this.toggleDebitModal();
     },
-
     clearValue() {
       localStorage.removeItem("nuxtBank");
+      this.nuxtBank = {
+        value: [],
+        total: 0,
+      };
     },
   },
   components: { Modal, DashboardTable },
