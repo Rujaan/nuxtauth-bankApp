@@ -3,7 +3,11 @@
     <div class="w-[400px] p-5 my-36 mx-auto bg-white rounded-xl relative">
       <div class="close" @click="closeModal">X</div>
       <h1>{{ heading }}</h1>
-      <BankForm :buttonText="buttonText" :submitForm="submitForm" />
+      <BankForm
+        :buttonText="buttonText"
+        :submitForm="submitForm"
+        @submitted="submitted"
+      />
     </div>
   </div>
 </template>
@@ -15,6 +19,10 @@ export default {
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    submitted() {
+      console.log("modal submitted");
+      this.$emit("submitted");
     },
   },
   components: { BankForm },

@@ -1,9 +1,12 @@
 <template>
   <div v-if="values">
-    <span class="my-10 text-2xl flex gap-x-3"
-      ><h4>Total :</h4>
-      <h3>{{ total }}</h3>
-    </span>
+    <div class="flex justify-between items-center">
+      <div class="my-10 text-2xl flex gap-x-3" v-if="total">
+        <h4>Total :</h4>
+        <h3>{{ total }}</h3>
+      </div>
+      <div><button @click="clearValue">Clear ALL</button></div>
+    </div>
     <table class="w-full mt-10">
       <tr class="bg-gray-100">
         <th>Id</th>
@@ -12,6 +15,7 @@
         <th>Remarks</th>
         <th>Type</th>
       </tr>
+
       <tr
         v-for="value in values"
         :key="value.id"
@@ -22,8 +26,12 @@
         "
       >
         <td>{{ value.id }}</td>
-        <td>
-          {{ value.date }}
+        <td class="text-blue-900">
+          <NuxtLink
+            :to="`/dashboard/date/${value.date}`"
+            class="cursor-pointer"
+            >{{ value.date }}</NuxtLink
+          >
         </td>
         <td>{{ value.amount }}</td>
         <td>{{ value.remarks }}</td>
@@ -38,24 +46,11 @@
 
 <script>
 export default {
-  data() {
-    return {
-      values: null,
-      total: 0,
-    };
-  },
+  props: ["values", "total"],
   methods: {
-    getCredits() {
-      if (localStorage.getItem("nuxtBank")) {
-        this.values = JSON.parse(localStorage.getItem("nuxtBank")).value;
-        this.total = JSON.parse(localStorage.getItem("nuxtBank")).total;
-      } else {
-        this.values = null;
-      }
+    clearValue() {
+      this.$emit("clear");
     },
-  },
-  mounted() {
-    this.getCredits();
   },
 };
 </script>

@@ -6,6 +6,8 @@
         heading="Add Credit"
         buttonText="Submit Credit"
         :submitForm="handleSubmitOfCredit"
+        @submitted="forceUp"
+        @click="forceUp"
       />
     </div>
     <div v-if="showDebitModal">
@@ -14,11 +16,11 @@
         heading="Add Debit"
         buttonText="Submit Debit"
         :submitForm="handleSubmitOfDebit"
+        @submitted="updateTable"
       />
     </div>
 
     <div class="text-3xl font-semibold uppercase">Dashboard</div>
-
     <div class="mt-10 flex gap-x-3 z-10 relative">
       <button
         @click="toggleCreditModal"
@@ -39,7 +41,9 @@
         <span class="relative group-focus:text-white">Add Debit</span>
       </button>
     </div>
-    <DashboardTable :key="componentKey" />
+    <div :key="componentKey">
+      <DashboardTable :values="value" :total="total" @clear="clearValue" />
+    </div>
   </div>
 </template>
 
@@ -51,11 +55,11 @@ export default {
   data() {
     return {
       nuxtBank: null,
+      value: null,
       total: null,
       showCreditModal: false,
       showDebitModal: false,
       componentKey: 0,
-      id: null,
     };
   },
   mounted() {
@@ -74,6 +78,8 @@ export default {
 
     if (!this.nuxtBank.value) {
       this.nuxtBank.value = [];
+    } else {
+      this.value = JSON.parse(localStorage.getItem("nuxtBank")).value;
     }
 
     if (!this.nuxtBank.value.id) {
@@ -86,6 +92,8 @@ export default {
 
     if (!this.nuxtBank.total) {
       this.nuxtBank.total = 0;
+    } else {
+      this.total = JSON.parse(localStorage.getItem("nuxtBank")).total;
     }
   },
   middleware({ $auth, redirect }) {
@@ -100,13 +108,25 @@ export default {
     toggleDebitModal() {
       this.showDebitModal = !this.showDebitModal;
     },
+
     updateTable() {
       this.componentKey += 1;
+      console.log(this.componentKey);
+    },
+
+    forceUp() {
+      // ...
+      this.$forceUpdate(); // Notice we have to use a $ here
+      console.log("forced");
+      // ...
     },
 
     handleSubmitOfCredit(creditInfo) {
-      console.log(creditInfo);
-      var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
+      try {
+        var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
+      } catch (error) {
+        var value = null;
+      }
       if (process.browser && value) {
         var bigId = Math.max.apply(
           Math,
@@ -126,12 +146,14 @@ export default {
       });
       this.nuxtBank.total += parseInt(creditInfo.amount);
       localStorage.setItem("nuxtBank", JSON.stringify(this.nuxtBank));
-      this.componentKey += 1;
     },
 
     handleSubmitOfDebit(debitInfo) {
-      console.log(debitInfo);
-      var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
+      try {
+        var value = JSON.parse(localStorage.getItem("nuxtBank")).value;
+      } catch (error) {
+        var value = null;
+      }
       if (process.browser && value) {
         var bigId = Math.max.apply(
           Math,
@@ -151,7 +173,10 @@ export default {
       });
       this.nuxtBank.total -= parseInt(debitInfo.amount);
       localStorage.setItem("nuxtBank", JSON.stringify(this.nuxtBank));
-      this.componentKey += 1;
+    },
+
+    clearValue() {
+      localStorage.removeItem("nuxtBank");
     },
   },
   components: { Modal, DashboardTable },

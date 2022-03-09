@@ -33,6 +33,7 @@
 
     <button
       @click.prevent="submitForm(amountInfo)"
+      @click="handleFormSubmit"
       class="inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-cyan-800 border border-cyan-900 rounded-full shadow-sm hover:bg-cyan-900 focus:outline-none focus:shadow-lg mt-10"
     >
       {{ buttonText }}
@@ -55,6 +56,7 @@ export default {
   methods: {
     handleFormSubmit() {
       this.$emit("submitted");
+      console.log("bankForm submitted");
     },
   },
   props: ["submitForm", "buttonText"],
