@@ -10,6 +10,7 @@ export default {
       //   this.$auth.$storage.removeUniversal("loggedIn");
       this.$auth.$storage.removeUniversal("user");
       //   this.$router.push({ name: "login" });
+      localStorage.removeItem("nuxtBank");
     },
   },
 };
