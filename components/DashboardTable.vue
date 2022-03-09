@@ -1,5 +1,5 @@
 <template>
-  <div v-if="values">
+  <div v-if="values.length > 0">
     <div class="flex justify-between items-center">
       <div class="my-10 text-2xl flex gap-x-3" v-if="total">
         <h4>Total :</h4>
