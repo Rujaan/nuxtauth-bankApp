@@ -27,6 +27,11 @@ export default {
       return this.$route.params.id;
     },
   },
+  middleware({ $auth, redirect }) {
+    if (!$auth.loggedIn) {
+      return redirect("/login");
+    }
+  },
 };
 </script>
 
