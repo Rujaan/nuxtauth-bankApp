@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       userInfo: {
-        email: "rujan@reconwithme.com",
+        email: "",
         password: "",
       },
     };
